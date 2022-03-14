@@ -5,12 +5,14 @@ namespace weatherapi;
 class Weather{
   
   private $weather;
+  private $location;
   
   public function __construct(string $ipv4){
   $location = json_decode(file_get_contents("http://ipinfo.io/" . $ipv4 . "/json"), true);
   $lat_lon = explode(",", $location["loc"]);
   $weather = json_decode(file_get_contents("http://api.openweathermap.org/data/2.5/weather?lat=" . $lat_lon[0] . "&lon=" . $lat_lon[1] . "&appid=484d1f57101a60bdcd20f4324ad6817b"), true);
   $this->weather = $weather;
+  $this->location = $location;
   }
   
   public function getLat() : float{
@@ -90,7 +92,7 @@ class Weather{
   }
   
   public function getTimezone() : int{
-  return $this->weather["timezone"];
+  return $this->location["timezone"];
   }
   
   public function getHoursFromTimezone() : int{
